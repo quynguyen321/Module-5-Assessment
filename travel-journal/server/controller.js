@@ -241,7 +241,7 @@ module.exports = {
         let rating = req.body.rating
         let countryId = req.body.countryId
         sequelize.query(
-            `INSERT INTO cities (name, rating, countryId)`
+            `INSERT INTO cities (name, rating, countryId) VALUES(${name}, ${rating}, ${countryId})`
             )
             .then(dbRes => res.status(200).send(dbRes[0]))
             .catch(err => console.log(err))
@@ -252,6 +252,9 @@ module.exports = {
             `SELECT city_id, cities.name AS city FROM cities
             SELECT country_id, countries.name AS country FROM countries
             JOIN cities ON countries = country_id`
+
+           ` SELECT city_id, cities.name as city, countries.country_id, countries.name AS country FROM cities
+           JOIN countries on countries.country_id = cities.country_id;`
                 )
             .then(dbRes => res.status(200).send(dbRes[0]))
             .catch(err => console.log(err))
@@ -260,7 +263,7 @@ module.exports = {
     deleteCity: (req, res) => {
         let existingCity = req.params.cityId
         sequelize.query(
-            `DELETE FROM cities WHERE city_id `
+            `DELETE FROM cities WHERE city_id = `
                 )
                 .then(dbRes => res.status(200).send(dbRes[0]))
                 .catch(err => console.log(err))
